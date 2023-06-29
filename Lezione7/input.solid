@@ -1,0 +1,21 @@
+iNEVT_dummy
+0
+0.8
+108
+1.1
+2.2
+delta_dummy
+nblk_dummy
+nstep_dummy
+eqtemp_dummy
+
+  ReadInput >> iNVET; 0=MD(NVE) 1=MC(NVT)
+  ReadInput >> restart;
+  ReadInput >> temp;
+  ReadInput >> npart;
+  ReadInput >> rho;
+  ReadInput >> rcut;
+  ReadInput >> delta;0.0005/0.12
+  ReadInput >> nblk;
+  ReadInput >> nstep;
+  ReadInput >> eqtemp;

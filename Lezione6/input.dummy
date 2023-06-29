@@ -1,0 +1,19 @@
+temp_dummy
+50
+1.0
+h_dummy
+algorithm_dummy
+0
+eq_dummy
+nblk_dummy
+nstep_dummy
+
+#temp
+#nspin
+#J
+#h
+#metropoli=1 gibbs = 0
+#restart
+#equilibration
+#nblk_dummy
+#nstep_dummy

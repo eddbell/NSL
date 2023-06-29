@@ -1,0 +1,11 @@
+STRUTTURA CODICE: 
+
+- intruduco tutte le librerie ( tensorflow ->keras )
+
+STEP 1
+- Definisco variabili che racchiudono input e output tran e test. Le carico  con una funzione speciale di keras
+- reshape: shift from keras dataset size to 28x28 size
+
+STEP 2 ARCHITECTURE
+-
+
