@@ -1,0 +1,19 @@
+2.00
+50
+1.0
+0.02
+1
+0
+0
+100
+10000
+
+#temp
+#nspin
+#J
+#h
+#metropoli=1 gibbs = 0
+#restart
+#equilibration
+#100
+#10000
