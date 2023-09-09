@@ -14,6 +14,7 @@ _/    _/  _/_/_/  _/_/_/_/ email: Davide.Galli@unimi.it
 #include <cmath>
 #include <iomanip>
 #include "Monte_Carlo_ISING_1D.h"
+#include "../Libs/random/random.h"
 
 using namespace std;
 

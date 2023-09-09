@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     cum_av2 = (cum_av2*i + sum_ave*sum_ave/L/L)/(i+1);
     cum_err = Error(cum_ave,cum_av2,i+1);
 
-    if ( (i+1)% 10 == 0) cout<<"Block "<<i+1<<"   Acceptance rate: "<<(double)accepted/attempted<<endl;
+    if ( (i+1)% ((int)N/10)== 0) cout<<"Block "<<i+1<<"   Acceptance rate: "<<(double)accepted/attempted<<endl;
     Rad<<i<<setw(15)<< cum_ave <<setw(15)<< cum_err <<endl;
 
   }

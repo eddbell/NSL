@@ -5,7 +5,7 @@ if [[ ! -d data ]]
 then
 	mkdir -p -v data
 else
-	rm -rf data/output_*
+	rm -rfv data/output_*
 fi
 
 name_algorithm=("METROPOLI" "GIBBS")

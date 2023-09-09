@@ -1,16 +1,22 @@
-3.5
+1
+1
+0.2
+5
+1
+1
+0.0001
 0
-1
-1
-1000
+100000
 100
-1
 
 
-ReadInput >> delta;
-ReadInput >> x;
-ReadInput >> sigma;
-ReadInput >> mu;
-ReadInput >> L;
-ReadInput >> N;
-ReadInput >> SA;
+
+  SA
+  iD
+  delta
+  1
+  1
+  delta_1
+  x
+  steps
+  nblk

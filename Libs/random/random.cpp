@@ -30,6 +30,23 @@ void Random :: SaveSeed(){
   return;
 }
 
+double Random::sign (double x) {
+     return (x > 0 ? 1. : -1. );
+}
+
+double Random::RanAngle() {
+
+   while(true) {
+      double x = Rannyu(-1.,1.);
+      double y = Rannyu(-1.,1.);
+
+      if(x*x + y*y <= 1 ){
+        double theta = sign(y)*acos(x/sqrt(x*x + y*y));
+        if(isnormal(theta) ) return theta;
+      }
+   }
+}
+
 double Random :: Gauss(double mean, double sigma) {
    double s=Rannyu();
    double t=Rannyu();
@@ -48,6 +65,7 @@ double Random :: Exp(double lambda) {
 double Random :: Lorentz(double gamma) {
    return gamma*tan(M_PI*(Rannyu()-1/2.));
 }
+
 double Random :: Rannyu(void){
   const double twom12=0.000244140625;
   int i1,i2,i3,i4;

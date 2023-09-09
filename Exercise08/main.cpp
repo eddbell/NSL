@@ -1,165 +1,234 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <iomanip>
 #include <cmath>
-#include <armadillo>
-
 #include "main.h"
-#include "../random/random.h"
-
+#include "../Libs/random/random.h"
 using namespace std;
-using namespace arma;
 
 
-int main (int argc, char *argv[]){
-  Input();
-  //CAverage();
-  //simulated annealing
-  int nloop = 30; //cicli per beta value
-  int ntot = 100; // numero di bet a value
 
-  if(SA ==1){
-    for (int i =0; i<ntot; i++){
-      accepted = 0;
-      attempted = 0;
-      cout<<i<<" loop of "<<ntot<<endl;
-      //while(attempted%nloop==0){
-      for(int j = 0; j<nloop;j++){
-        beta = 1+beta;
-        mu += rnd.Rannyu(-1,1)/beta;
-        sigma += rnd.Rannyu(-1,1)/beta;
-        CAverage();
-      }
-    }
-  }
-  else CAverage();
-}
-
-double Error(double sum, double sum2, int n)
+int main(int argc, char *argv[])
 {
-    if(n==0) return 0.0;
-    else return sqrt((sum2 - sum*sum)/n);
-}
 
-void CAverage(){
+  //eseguo la simulazione
+  Input();
 
-  ofstream Ene, Pos;
-  Ene.open("output_energy.dat",ios::app);
-  Pos.open("output_position.dat",ios::app);
+  cout<<"\n<INFO> Computing the simulated annealing for mu and sigma estimation: \n";
+
+  if(SA != 0) {
+      SimulatedAnnealing();
+      //ReadOptimizedParameters();
+      cout<<" new mu ="<<mu<<"\t new sigma = "<<sig<<endl;
+  }
+
+  ofstream H, xpsi;
+  H.open("output_H.dat",ios::app);
+  xpsi.open("output_x_psi2.dat",ios::app);
   double cum_av2 = 0;  double cum_ave = 0;  double cum_err = 0;
 
   for(int i = 0;i<N;i++){
     double sum_ave = 0;
+    ResetBlock();
+
     for(int j = 0;j< L;j++){
-      sum_ave += Energy(x);
-      x = Mstep(x);
+      sum_ave += Hamiltonian(x); //compute Hamiltonian
+      x = metropsi2(x); //new step
+      xpsi<<x<<endl;
+
     }
     cum_ave = (cum_ave*i + sum_ave/L)/(i+1);
     cum_av2 = (cum_av2*i + sum_ave*sum_ave/L/L)/(i+1);
     cum_err = Error(cum_ave,cum_av2,i+1);
 
-    cout<<"block "<<i+1<<"    "<<"acceptance rate: "<<(double)accepted/attempted<<endl;
-    //Ene<<i<<setw(15)<< cum_ave <<setw(15)<< cum_err <<endl;
+    if ( (i+1)% ((int)N/10)== 0)
+      cout<<"Block "<<i+1<<"   Acceptance rate: "<<(double)accepted/attempted<<endl;
+    H<<i<<setw(15)<< cum_ave <<setw(15)<< cum_err <<endl;
+
   }
+  H.close();
+  xpsi.close();
 
-  Pos.close();
-  Ene.close();
+  return 0;
 }
 
-void Input(){
-  ifstream Primes("Primes"), Seed, ReadInput;
-  int p1, p2;
-  Primes >> p1 >> p2 ;
-  Primes.close();
-  cout<<endl<<"---------------------------------------"<<endl;
-  if(1) Seed.open("seed.in");
-  else Seed.open("seed.out");
-  Seed >> seed[0] >> seed[1] >> seed[2] >> seed[3];
-  rnd.SetRandom(seed,p1,p2);
-  Seed.close();
-  cout<<"SETTING\n";
+void Input(void)
+{
+  ifstream ReadInput;
+
+  rnd.init_random();
+
+//Read input informations
   ReadInput.open("input.in");
-  ReadInput >> delta;
-  cout<<"delta = "<<delta<<endl;
-  ReadInput >> x;
-  cout<<"x = "<<x<<endl;
-  ReadInput >> sigma;
-  ReadInput >> mu;
-  cout<<"sigma = "<<sigma<<"     mu = "<<mu<<endl;
-  ReadInput >> L;
-  ReadInput >> N;
-  cout<<"Lengh block = "<<L<<"    "<<"Number of blocks "<<N<<endl;
+
   ReadInput >> SA;
+
+  ReadInput >> mu;
+
+  ReadInput >> sig;  //Eigenstate
+
+  ReadInput >> delta;//delta;
+
+  ReadInput >> delta_opt;//delta;
+
+  ReadInput >> temp_in; //temperature;
+  temp = temp_in;
+
+  ReadInput >> delta_temp; //delta temperature;
+
+  ReadInput >> x_in;
+  x = x_in;
+
+  ReadInput >> M; //steps
+
+  ReadInput >> N; //blocks
+  L = M/N;
   ReadInput.close();
-  cout<<endl<<"---------------------------------------"<<endl;
-  accepted =0;
+}
+
+void ResetBlock(void){
+  x = x_in;
   attempted = 0;
+  accepted = 0;
 }
 
-double Mstep(double x0){
-  double w;
-  double x1 = rnd.Rannyu(x0-delta,x0+delta);
-  if(SA == 1) w = exp(-beta*GS2(x1)/GS2(x0));
-  else w = GS2(x1)/GS2(x0);
-  if(w<1 && rnd.Rannyu()>w) x1 = x0;
-  else accepted++;
-  attempted++;
-  return x1;
+double Gauss(double x) {
+  return exp(-(x-mu)*(x-mu)/sig/sig/2.);
 }
 
-double Gauss1D(double x){
-  return exp(-(x-mu)*(x-mu)/sigma/sigma/2);
-}
-double GS2(double x){
-  return (Gauss1D(x)+ Gauss1D(-x))*(Gauss1D(+x)+ Gauss1D(-x));
+
+double Psi(double x) {
+ return Gauss(x) + Gauss(-x);
 }
 
-double Energy(double x) {
-  double a1 = Gauss1D(x)*((x-mu)*(x-mu)/pow(sigma,4)-1/pow(sigma,2));
-  double a2 =  Gauss1D(-x)*((x+mu)*(x+mu)/pow(sigma,4)-1/pow(sigma,2));
-  double b = Gauss1D(x)+Gauss1D(-x);
-  double a = -(a1+a2)/2.;
-  return (a+V(x))/b;
+double Psi2(double x){
+  return Psi(x)*Psi(x);
 }
 
-double V(double x){
-  return x*x*x*x-5./2.*x*x;
+double Kinetic(double x) {
+    double a = (x-mu)*(x-mu)/(sig*sig);
+    double b = (x+mu)*(x+mu)/(sig*sig);
+    return 0.5/(sig*sig)*( 1. -( a*Gauss(x) + b*Gauss(-x) )/Psi(x) );
 }
-/*
-int main (int argc, char *argv[]){
 
-  Input();
+double Potenzial(double x) {
+    return pow(x,4) -5./2.*pow(x,2);
+}
+double Hamiltonian(double x) {
+    return Potenzial(x) + Kinetic(x);
+}
 
-  CAverage();
+void Print(int istep){
+  ofstream Position;
+  const int wd=30;
+  Position.open("output_psi2.dat",ios::app);
+  Position << istep;
+  Position<<setw(wd)<<x;
+  Position << endl;
+  Position.close();
 }
 
 double Error(double sum, double sum2, int n)
 {
-    if(n==0) return 0.0;
-    else return sqrt((sum2 - sum*sum)/n);
+    return (n==0 ? 0. : sqrt((sum2 - sum*sum)/n));
 }
 
-void CAverage(){
+//metodi montecarlo
+double metropsi2(double x){
+  double x1, x0;
+  double p_new = 0;
+  double p_old = 0;
 
-  ofstream Ene, Pos;
-  Ene.open("output_energy.dat",ios::app);
-  Pos.open("output_position.dat",ios::app);
-  double cum_av2 = 0;  double cum_ave = 0;  double cum_err = 0;
+  x0 = x;
+  x1 = x + rnd.Rannyu(-delta/2.,+delta/2.);
 
-  for(int i = 0;i<N;i++){
-    double sum_ave = 0;
-    for(int j = 0;j< L;j++){
-      sum_ave += Energy(x);
-      x = Mstep(x);
-    }
-    cum_ave = (cum_ave + sum_ave/L)/(i+1);
-    cum_av2 = (cum_av2 + sum_ave*sum_ave/L/L)/(i+1);
-    cum_err = cum_err + Error(cum_ave,cum_av2,i+1);
+  p_new = Psi2(x1);
+  p_old = Psi2(x0);
 
-    cout<<"block "<<i+1<<"    "<<"acceptance rate: "<<(double)accepted/attempted<<endl;
-    Ene<<i<<setw(15)<< cum_ave <<setw(15)<<  cum_err<<endl;
+  attempted++;
+
+  if (p_new > p_old){
+    accepted++;
+    return x1;
   }
+  else{
+    if (rnd.Rannyu()<p_new/p_old){
+      accepted++;
+      return x1;
+    }
+    return x0;
+  }
+};
 
-  Pos.close();
-  Ene.close();
-}*/
+void SimulatedAnnealing(void){
+
+    const int n_opt_steps = 1000;
+    //const int n_beta = 50;
+    double H_old {};
+    double H_new {};
+    double mu_new, sig_new, mu_old, sig_old;
+    int wd = 20;
+    beta = 0;
+    ofstream opt_out;
+    opt_out.open("out_opt.dat");
+    unsigned int temp_chill = 10;
+    double x_old = x;
+    unsigned int count = 0;
+    while (temp > delta_temp){
+
+      for (unsigned int s{}; s< temp_chill;s++){
+        beta = 1./temp;
+        H_old = 0;
+        H_new = 0;
+
+        x = x_old;
+
+        for(int i{}; i< n_opt_steps; ++i){
+            x = metropsi2(x);
+            H_old += Hamiltonian(x);
+        }
+        H_old /= n_opt_steps;
+        mu_old = mu;
+        sig_old = sig;
+        //x + rnd.Rannyu()
+        mu_new =fabs( mu + delta_opt*rnd.Rannyu(-1/2.,+1/2.) );
+        sig_new =fabs( sig + delta_opt*rnd.Rannyu(-1/2.,+1/2.) );
+        //in our situation the sign of mu and sigma is equivalent
+        mu = mu_new;
+        sig = sig_new;
+
+
+        x = x_old; //Reset of the starting position
+
+        for(int i{}; i< n_opt_steps; ++i){
+            x = metropsi2(x);
+            H_new += Hamiltonian(x);
+        }
+        H_new /= n_opt_steps;
+
+        //calculate H with mu and sigma, then evolve mu and sigma and recalculate H with the new parameters
+        //then use Metropolis with Boltzmann weight, if accept, use mu and sigma as new parameters
+        //start each time from x0
+        //every few cycles lower the temperature
+
+        if(rnd.Rannyu() < exp( beta*(H_old-H_new)) ){
+            SA_accepted++;
+        }
+        else{
+          sig = sig_old;
+          mu = mu_old;
+        }
+        SA_attempted++;
+        count++;
+      }
+
+
+      opt_out<< beta<<setw(wd) << mu << setw(wd)<< sig << setw(wd) << H_new <<endl;
+
+      if ( (int)(count/temp_chill -1) % (int)(temp_in/delta_temp/10.) == 0)
+        cout<<count/temp_chill/temp_in*delta_temp*100<<"%    "<<"T = "<< temp<<"   acceptation rate = "<<SA_accepted/SA_attempted<<endl;
+
+      temp -= delta_temp;
+    }
+}

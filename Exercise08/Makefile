@@ -4,7 +4,7 @@ main.exe : main.o random.o
 	$(CC) random.o main.o -o main.exe
 main.o : main.cpp main.h
 	$(CC) -c main.cpp -o main.o $(CFLAGS)
-random.o : ../random/random.cpp ../random/random.h
-	$(CC) -c ../random/random.cpp -o random.o $(CFLAGS)
+random.o : ../Libs/random/random.cpp ../Libs/random/random.h
+	$(CC) -c ../Libs/random/random.cpp -o random.o $(CFLAGS)
 clean :
-	rm *.o main.exe
+	rm *.o

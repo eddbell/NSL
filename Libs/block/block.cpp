@@ -9,7 +9,7 @@
 using namespace std;
 
 Block::Block(int n, vector<double>& R) {
-    m_N = n;
+    m_N = n;  //number of blocks
     m_M = R.size();
     vector<double> av2(n);
     vector<double> ave(n);

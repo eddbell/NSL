@@ -1,41 +1,46 @@
 #ifndef __main__
 #define __main__
+#include "../Libs/random/random.h"
+#include <vector>
+using namespace std;
 
-#include "../random/random.h"
-#include <armadillo>
-
-using namespace arma;
 //Random numbers
 int seed[4];
 Random rnd;
 
 //Global variables
-int N, L;
-double sumE = 0;
-double E = 0, E2 = 0;
-//function parameter
-double x = 1,sigma = 1, mu = 1;
 
-//statistics
-int accepted = 0,attempted = 0, SA;
-double delta; double beta = 1;
+//blocks statistic constants
+int M, N, L;
+//metropolis psi2
+double delta, accepted = 0, attempted = 0;
+
+//Simulation Annealing
+bool SA;
+double delta_opt, SA_accepted = 0, SA_attempted = 0;
+double beta, temp_in, temp, delta_temp; //boltz
+
+//configuration
+double x_in, x, sig, mu;
 
 
 
 //*********Functions*************************************
 
-void Input();
-//calcola il modulo
-double Module(vec&);
-//funzioni algebriche
-double Gauss1D(double);
-double GS2(double);
-double V(double);
-double Energy(double);
-//metodi montecarlo
-double Mstep(double);
-//block statistics
+
+void Input(void);
 double Error(double,double,int);
-void PrintE(double,double,int);
-void CAverage();
-#endif
+void ResetBlock(void);
+
+double Psi(double);
+double Psi2(double);
+double Gauss(double);
+
+double Kinetic(double);
+double Potenzial(double);
+double Hamiltonian(double);
+
+void SimulatedAnnealing(void);
+double metropsi2(double);
+void PrintRate(int);
+#endif // __funzioni__

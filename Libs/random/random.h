@@ -34,6 +34,9 @@ public:
   double Exp(double lambda);
   double Lorentz(double gamma);
   void init_random();
+  double RanAngle(); // return angle uniformly generated between 0 and 2pi)
+  double sign(double);
+
 };
 
 #endif // __Random__
