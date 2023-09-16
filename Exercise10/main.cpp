@@ -6,6 +6,7 @@
 #include "../Libs/block/block.h"
 using namespace std;
 
+bool BOOL_MIGRATION;
 unsigned int GENERATION_MIGRATION;
 unsigned int NUM_CITIES;
 unsigned int POPULATION_SIZE;
@@ -54,6 +55,7 @@ int main(int argc, char* argv[]) {
 
   double tstart = MPI_Wtime();
   if(RANK == 0) cout<<"\nStarting of GA for TSP problem...\n"<<endl;
+  double bestL_ave = 0;
   for (unsigned int generation = 1; generation < MAX_GENERATIONS+1; ++generation) {
 
       if(generation % (int)(MAX_GENERATIONS/10) == 0 && RANK == 0) cout<<generation/(int)(MAX_GENERATIONS/10)*10<<"%"<<endl;
@@ -61,14 +63,14 @@ int main(int argc, char* argv[]) {
       vector<Tour> newPopulation(POPULATION_SIZE);
 
       // Crossover e mutazione per generare la nuova popolazione
-
+      bestL_ave = 0;
       for (unsigned int i = 0; i < POPULATION_SIZE; i++) {
           sortPopulation(population);
           int p1 = ((int)(POPULATION_SIZE*pow(rnd.Rannyu(),CONVENIENT_EXPONENT)));
           int p2 = ((int)(POPULATION_SIZE*pow(rnd.Rannyu(),CONVENIENT_EXPONENT)));
 
           //fill the vector of the half lower L values and then I apply the average block for blocks of POPULATION_SIZE/2 size
-          if (i < POPULATION_SIZE/2)  bestL.push_back(population[i].distance);
+          if (i < POPULATION_SIZE/2)  bestL_ave += population[i].distance/(POPULATION_SIZE/2);
 
           //cout<<" fraction of generation: "<<i<< "of" << POPULATION_SIZE<<endl;
           if (rnd.Rannyu()<M_RATE){
@@ -139,9 +141,8 @@ int main(int argc, char* argv[]) {
           //newPopulation[i].distance = bestTour.distance;
       }
 
-      sortPopulation(newPopulation);
-
-      if(generation % GENERATION_MIGRATION == 0){
+      if(generation % GENERATION_MIGRATION == 0 && BOOL_MIGRATION==1){
+        sortPopulation(newPopulation);
         for(int nodo = 0; nodo < SIZE ; ++nodo){
           for (unsigned int i = 0; i < POPULATION_SIZE; ++i) {
               bestTour = selectBestTour(bestTour, newPopulation[i]);
@@ -159,7 +160,7 @@ int main(int argc, char* argv[]) {
           bestTour = selectBestTour(bestTour, population[i]);
       }
 
-      out_L<<generation<<setw(15)<<bestTour.distance<<endl;
+      out_L<<generation<<setw(15)<<bestTour.distance<<setw(15)<<bestL_ave<<endl;
   }
 
   out_L.close();
@@ -187,12 +188,8 @@ int main(int argc, char* argv[]) {
 
   cout<<"------ NODO "<<RANK<<" ------"<<endl;
   cout<<"Execution time = "<<dt<<endl;
-  cout << "Best Tour Length: " << bestTour.distance << endl;
+  cout << "Best Tour Length: " << bestTour.distance <<"  ave = "<<bestL_ave<< endl;
 
-  string out_L_Ave_N = "./out_L_Ave_N" + std::to_string(RANK) + ".dat";
-  Block L_average(MAX_GENERATIONS,bestL);//100 blocchi
-  L_average.Average();
-  L_average.Average_cumulative(out_L_Ave_N);
   cout<<"---------------------------"<<endl;
 
   MPI_Finalize();
@@ -215,11 +212,14 @@ void StartGenerator(void){
   rnd.SetRandom(seed,p1,p2);
   Seed.close();
 }
+
 void Input(void)
 {
   ifstream ReadInput;
   //Read input informations
   ReadInput.open("input.in");
+
+  ReadInput >> BOOL_MIGRATION;
 
   ReadInput >> NUM_CITIES;
 
