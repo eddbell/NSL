@@ -1,0 +1,3 @@
+perceptrons: given several inputs with different weight it return an output which can be 0 or 1.
+sigmoid neurons with activation functions: from the same previous idea they return value less change-dependent wich are a continuum using funcitons like: Sigmoid.
+ - It’s the smoothness of the activation functions is a crucial fact: small changes in the weights and in the bias will produce a small change output
