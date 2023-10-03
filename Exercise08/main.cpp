@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
   if(SA != 0) {
       SimulatedAnnealing();
-      //ReadOptimizedParameters();
+      FindBestParameters();
       cout<<" new mu ="<<mu<<"\t new sigma = "<<sig<<endl;
   }
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
   }
   H.close();
   xpsi.close();
-
+  cout<<"H ave = "<< cum_ave <<" +- "<< cum_err <<endl;
   return 0;
 }
 
@@ -71,11 +71,6 @@ void Input(void)
   ReadInput >> delta;//delta;
 
   ReadInput >> delta_opt;//delta;
-
-  ReadInput >> temp_in; //temperature;
-  temp = temp_in;
-
-  ReadInput >> delta_temp; //delta temperature;
 
   ReadInput >> x_in;
   x = x_in;
@@ -163,22 +158,28 @@ double metropsi2(double x){
 
 void SimulatedAnnealing(void){
 
-    const int n_opt_steps = 1000;
-    //const int n_beta = 50;
-    double H_old {};
-    double H_new {};
-    double mu_new, sig_new, mu_old, sig_old;
+    const int n_opt_steps = 10000;
     int wd = 20;
-    beta = 0;
+    int beta_max = 1000;
+    double b_step = 10;
+    unsigned int temp_chill = 100;
+    double H_old, H_new, H_err, mu_new, sig_new, mu_old, sig_old;
+    double x_old = x;
+    double x_new;
+
     ofstream opt_out;
     opt_out.open("out_opt.dat");
-    unsigned int temp_chill = 10;
-    double x_old = x;
-    unsigned int count = 0;
-    while (temp > delta_temp){
+
+    beta = 0;
+    while (beta < beta_max){
+      if (beta < beta_max*0.1) beta+=b_step/10;
+      else if (beta < beta_max*0.5) beta+=b_step;
+      else beta+=b_step*5;
+      SA_accepted=0;
+      SA_attempted=0;
 
       for (unsigned int s{}; s< temp_chill;s++){
-        beta = 1./temp;
+
         H_old = 0;
         H_new = 0;
 
@@ -206,13 +207,13 @@ void SimulatedAnnealing(void){
             H_new += Hamiltonian(x);
         }
         H_new /= n_opt_steps;
-
+        x_new = x;
         //calculate H with mu and sigma, then evolve mu and sigma and recalculate H with the new parameters
         //then use Metropolis with Boltzmann weight, if accept, use mu and sigma as new parameters
         //start each time from x0
         //every few cycles lower the temperature
 
-        if(rnd.Rannyu() < exp( beta*(H_old-H_new)) ){
+        if(rnd.Rannyu() <= exp( beta*(H_old-H_new)) ){
             SA_accepted++;
         }
         else{
@@ -220,15 +221,31 @@ void SimulatedAnnealing(void){
           mu = mu_old;
         }
         SA_attempted++;
-        count++;
       }
 
 
       opt_out<< beta<<setw(wd) << mu << setw(wd)<< sig << setw(wd) << H_new <<endl;
-
-      if ( (int)(count/temp_chill -1) % (int)(temp_in/delta_temp/10.) == 0)
-        cout<<count/temp_chill/temp_in*delta_temp*100<<"%    "<<"T = "<< temp<<"   acceptation rate = "<<SA_accepted/SA_attempted<<endl;
-
-      temp -= delta_temp;
+      cout<<"beta = "<< beta<<setw(wd)<<" SA acceptation rate = "<<SA_accepted/SA_attempted<<endl;
     }
+
+
+    opt_out.close();
+}
+
+void FindBestParameters(void) {
+    ifstream in;
+    double beta_dummy, m_dummy , s_dummy, h_dummy;
+    in.open("out_opt.dat");
+
+    in>>beta_dummy>>mu>>sig>>h;
+    string riga;
+    while (std::getline(in, riga)){
+        in>>beta_dummy>>m_dummy>>s_dummy>>h_dummy;
+        if(h_dummy < h) {
+            mu = m_dummy;
+            sig = s_dummy;
+            h = h_dummy;
+        }
+    }
+    in.close();
 }

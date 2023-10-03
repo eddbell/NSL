@@ -9,8 +9,6 @@
 
 using namespace std;
 
-
-
 int main (int argc, char *argv[]){
 
   auto S_t = [](double S0,double sigma,double ran_gauss,double r,double dt){

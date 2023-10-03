@@ -1,10 +1,8 @@
 1
 1
 0.2
-5
-1
-1
-0.0001
+4.8
+0.1
 0
 100000
 100
@@ -12,11 +10,10 @@
 
 
   SA
-  iD
+  mu
+  sig
   delta
-  1
-  1
-  delta_1
+  delta_opt
   x
   steps
   nblk

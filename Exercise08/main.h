@@ -18,10 +18,10 @@ double delta, accepted = 0, attempted = 0;
 //Simulation Annealing
 bool SA;
 double delta_opt, SA_accepted = 0, SA_attempted = 0;
-double beta, temp_in, temp, delta_temp; //boltz
+double beta, temp; //boltz
 
 //configuration
-double x_in, x, sig, mu;
+double x_in, x, sig, mu, h;
 
 
 
@@ -43,4 +43,6 @@ double Hamiltonian(double);
 void SimulatedAnnealing(void);
 double metropsi2(double);
 void PrintRate(int);
+
+void FindBestParameters(void);
 #endif // __funzioni__

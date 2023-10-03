@@ -3,8 +3,6 @@ mu_dummy
 sig_dummy
 delta_dummy
 delta_opt_dummy
-temp_dummy
-delta_t_dummy
 x_dummy
 steps_dummy
 nblk_dummy
@@ -12,11 +10,10 @@ nblk_dummy
 
 
   SA
-  iD
+  mu
+  sig
   delta
-  delta_opt_dummy
-  temp_dummy
-  delta_temp_dummy
+  delta_opt
   x
   steps
   nblk
