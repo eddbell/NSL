@@ -114,16 +114,6 @@ double Hamiltonian(double x) {
     return Potenzial(x) + Kinetic(x);
 }
 
-void Print(int istep){
-  ofstream Position;
-  const int wd=30;
-  Position.open("output_psi2.dat",ios::app);
-  Position << istep;
-  Position<<setw(wd)<<x;
-  Position << endl;
-  Position.close();
-}
-
 double Error(double sum, double sum2, int n)
 {
     return (n==0 ? 0. : sqrt((sum2 - sum*sum)/n));
