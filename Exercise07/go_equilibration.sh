@@ -26,14 +26,14 @@ echo -e "----------------------------------------------\n"
 cp ./Config/config.fcc ./Config/config.in
 cp ./Config/input.solid ./Config/input.in
 sed -i "s/iNEVT_dummy/1/g" ./Config/input.in
-sed -i "s/nblk_dummy/1000/g" ./Config/input.in
+sed -i "s/nblk_dummy/50000/g" ./Config/input.in
 sed -i "s/nstep_dummy/1/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/0.11/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        1            (FIXED)"
-echo -e "Blocks =       1000         (FIXED)"
+echo -e "Blocks =       50000         (FIXED)"
 echo -e "Steps =        1            (FIXED)"
 echo -e "eqtemp =       0            (FIXED)"
 echo -e "delta =        0.11 "
@@ -52,14 +52,14 @@ echo -e "----------------------------------------------\n"
 cp ./Config/config.out ./Config/config.in
 cp  ./Config/input.liquid ./Config/input.in
 sed -i "s/iNEVT_dummy/1/g" ./Config/input.in
-sed -i "s/nblk_dummy/1000/g" ./Config/input.in
+sed -i "s/nblk_dummy/50000/g" ./Config/input.in
 sed -i "s/nstep_dummy/1/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/0.205/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        1            (FIXED)"
-echo -e "Blocks =       1000         (FIXED)"
+echo -e "Blocks =       50000         (FIXED)"
 echo -e "Steps =        1            (FIXED)"
 echo -e "eqtemp =       0            (FIXED)"
 echo -e "delta =        0.205 "
@@ -76,14 +76,14 @@ echo -e "----------------------------------------------\n"
 cp ./Config/config.out ./Config/config.in
 cp ./Config/input.gas ./Config/input.in
 sed -i "s/iNEVT_dummy/1/g" ./Config/input.in
-sed -i "s/nblk_dummy/1000/g" ./Config/input.in
+sed -i "s/nblk_dummy/50000/g" ./Config/input.in
 sed -i "s/nstep_dummy/1/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/4/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        1            (FIXED)"
-echo -e "Blocks =       1000         (FIXED)"
+echo -e "Blocks =       50000         (FIXED)"
 echo -e "Steps =        1            (FIXED)"
 echo -e "eqtemp =       0            (FIXED)"
 echo -e "delta =        4 "

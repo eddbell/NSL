@@ -216,11 +216,11 @@ void inversionContiguousCities(vector<int>& tour)
     int m = rnd.Rannyu(1., NUM_CITIES - 2);
     vector<int> vcopy = tour;
 
-    int a = rnd.Rannyu(1., NUM_CITIES - m);
+    int a = rnd.Rannyu(0., NUM_CITIES - m);
 
-    for (unsigned int i{a}, j{a + m - 1}; i < a + m; ++i, --j)
+    for (int i = 1;i<m;i++)
     {
-        tour[i] = vcopy[j];
+        tour[a+i] = vcopy[a+m-i];
     }
 }
 bool isInVector(vector<int> v, double element){
@@ -338,7 +338,7 @@ void Input(void)
 int main() {
     Input();
     //cout<<"PROVA "<<pow(rnd.Rannyu(),CONVENIENT_EXPONENT)<<endl;
-    vector<double> bestL;
+    double bestL_ave{};
     vector<City> cities(NUM_CITIES);
     // Inizializza le città con coordinate casuali
     for (unsigned int i = 0; i < NUM_CITIES; ++i) {
@@ -358,10 +358,11 @@ int main() {
     out_L.open("out_L.dat",ios::app);
 
     Tour bestTour = population[0];
-    for (int generation = 0; generation < MAX_GENERATIONS; ++generation) {
+    for (int generation = 1; generation <= MAX_GENERATIONS; ++generation) {
 
         if(generation % (int)(MAX_GENERATIONS/10) == 0) cout<<generation/(int)(MAX_GENERATIONS/10)*10<<"%"<<endl;
 
+        bestL_ave = 0;
         vector<Tour> newPopulation;
 
         // Crossover e mutazione per generare la nuova popolazione
@@ -372,7 +373,7 @@ int main() {
             int p2 = ((int)(POPULATION_SIZE*pow(rnd.Rannyu(),CONVENIENT_EXPONENT)));
 
             //fill the vector of the half lower L values and then I apply the average block for blocks of POPULATION_SIZE/2 size
-            if (i < POPULATION_SIZE/2)  bestL.push_back(population[i].distance);
+            if (i < POPULATION_SIZE/2)  bestL_ave += population[i].distance/(POPULATION_SIZE/2);
 
             //cout<<" fraction of generation: "<<i<< "of" << POPULATION_SIZE<<endl;
             if (rnd.Rannyu()<M_RATE){
@@ -446,7 +447,7 @@ int main() {
             bestTour = selectBestTour(bestTour, population[i]);
         }
 
-        out_L<<generation<<setw(15)<<bestTour.distance<<endl;
+        out_L<<generation<<setw(15)<<bestTour.distance<<setw(15)<<bestL_ave<<endl;
     }
     out_L.close();
 
@@ -472,11 +473,6 @@ int main() {
     cout << endl;
 
     cout << "Best Tour Length: " << bestTour.distance << endl;
-
-
-    Block L_average(MAX_GENERATIONS,bestL);//100 blocchi
-    L_average.Average();
-    L_average.Average_cumulative("./out_L_Ave.dat");
 
     return 0;
 }

@@ -4,20 +4,21 @@ make
 if [[ -d data ]]
 then
 	rm -rf data
+	echo -e "Cleaning ./data directory"
 fi
 mkdir -p data
 
-echo -e "Cleaning ./data directory"
+
 
 echo -e "\nExercise 9 - The Travel Salesman Problem\n"
 echo -e "_________________Square map_________________\n\n"
 
 MAP_GEOMETRY=0
 NUM_CITIES=34
-POPULATION_SIZE=1000
+POPULATION_SIZE=500
 MAX_GENERATIONS=200
-M_RATE=0.03
-C_RATE=0.5
+M_RATE=0.3
+C_RATE=0.8
 CONVENIENT_EXPONENT=4
 
 cp input.dummy input.in
@@ -45,7 +46,6 @@ echo -e "CONVENIENT_EXPONENT = $CONVENIENT_EXPONENT"
 mv -v out_cities.dat ./data/out_cities_square.dat
 mv -v out_order.dat ./data/out_order_square.dat
 mv -v out_L.dat ./data/out_L_square.dat
-mv -v out_L_Ave.dat ./data/out_L_Ave_square.dat
 
 echo -e "___________________________________________________________\n\n"
 
@@ -53,11 +53,11 @@ echo -e "_________________Circle map_________________\n\n"
 
 MAP_GEOMETRY=1
 NUM_CITIES=34
-POPULATION_SIZE=1000
-MAX_GENERATIONS=300
-M_RATE=0.03
+POPULATION_SIZE=500
+MAX_GENERATIONS=200
+M_RATE=0.6
 C_RATE=0.5
-CONVENIENT_EXPONENT=4
+CONVENIENT_EXPONENT=2
 
 cp input.dummy input.in
 
@@ -84,7 +84,6 @@ echo -e "CONVENIENT_EXPONENT = $CONVENIENT_EXPONENT"
 mv -v out_cities.dat ./data/out_cities_circle.dat
 mv -v out_order.dat ./data/out_order_circle.dat
 mv -v out_L.dat ./data/out_L_circle.dat
-mv -v out_L_Ave.dat ./data/out_L_Ave_circle.dat
 
 echo -e "___________________________________________________________\n\n"
 

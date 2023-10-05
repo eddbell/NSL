@@ -5,7 +5,7 @@ using namespace std;
 
 // Function to calculate the Euclidean distance between two cities
 double distance(const City& city1, const City& city2) {
-    return sqrt(pow(city1.x - city2.x, 2) + pow(city1.y - city2.y, 2));
+    return pow(city1.x - city2.x, 2) + pow(city1.y - city2.y, 2);
 
 }
 
@@ -19,10 +19,12 @@ void shuffle(vector<int>& tour){
       tour[id1] = tour[id2];
       tour[id2] = save_el;
   }
+  
   return;
 }
 
 // Funzione per calcolare la lunghezza del percorso (tour)
+/*
 double tourLength(const Tour& tour, const vector<City>& cities) {
     double totalDistance = 0.0;
     for (unsigned int i = 0; i < NUM_CITIES; ++i) {
@@ -31,13 +33,13 @@ double tourLength(const Tour& tour, const vector<City>& cities) {
     totalDistance += distance(cities[tour.order[NUM_CITIES]], cities[tour.order[0]]);
     return totalDistance;
 }
-
-double L2function(const Tour& tour, const vector<City>& cities) {
+*/
+double tourLength(const Tour& tour, const vector<City>& cities) {
     double totalDistance = 0.0;
     for (unsigned int i = 0; i < NUM_CITIES; ++i) {
-        totalDistance += pow(distance(cities[tour.order[i]], cities[tour.order[i + 1]]),2);
+        totalDistance += distance(cities[tour.order[i]], cities[tour.order[i + 1]]);
     }
-    totalDistance += pow(distance(cities[tour.order[NUM_CITIES]], cities[tour.order[0]]),2);
+    totalDistance += distance(cities[tour.order[NUM_CITIES]], cities[tour.order[0]]);
     return totalDistance;
 }
 
@@ -178,15 +180,15 @@ void permuteContiguousCities(vector<int>& tour){
 
 void inversionContiguousCities(vector<int>& tour)
 {
-    int m = rnd.Rannyu(1., NUM_CITIES - 2);
-    vector<int> vcopy = tour;
+  int m = rnd.Rannyu(1., NUM_CITIES - 2);
+  vector<int> vcopy = tour;
 
-    int a = rnd.Rannyu(1., NUM_CITIES - m);
+  int a = rnd.Rannyu(0., NUM_CITIES - m);
 
-    for (unsigned int i{a}, j{a + m - 1}; i < a + m; ++i, --j)
-    {
-        tour[i] = vcopy[j];
-    }
+  for (int i = 1;i<m;i++)
+  {
+      tour[a+i] = vcopy[a+m-i];
+  }
 }
 bool isInVector(vector<int> v, double element){
 

@@ -13,6 +13,7 @@ unsigned int POPULATION_SIZE;
 unsigned int MAX_GENERATIONS;
 double M_RATE;
 double C_RATE;
+double R_RATE;
 double CONVENIENT_EXPONENT;
 int seed[4];
 int RANK;
@@ -21,33 +22,35 @@ Random rnd;
 int Nmigr = 50;
 
 int main(int argc, char* argv[]) {
-
-  Input();
-
   MPI_Init(&argc,&argv);
   MPI_Comm_size(MPI_COMM_WORLD, &SIZE);
   MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
 
-  StartGenerator();
+  Input();
 
-  //cout<<"PROVA "<<pow(rnd.Rannyu(),CONVENIENT_EXPONENT)<<endl;
-  vector<double> bestL;
   vector<City> cities(NUM_CITIES);
-  // Inizializza le città con coordinate casuali
-
   ifstream inCities;
   inCities.open("American_capitals.dat");
   for (unsigned int i = 0; i < NUM_CITIES; ++i) {
       inCities >> cities[i].x;
       inCities >> cities[i].y;
-      // cout<<cities[i].x<<" "<<cities[i].x<<endl;
+      //cout<<"id = "<<i<<"    "<<cities[i].x<<" "<<cities[i].y<<endl;
   }
   inCities.close();
 
-  vector<Tour> population = generateInitialPopulation(cities);
-  //CheckPopulation(population);
+  StartGenerator();
 
+  //cout<<"PROVA "<<pow(rnd.Rannyu(),CONVENIENT_EXPONENT)<<endl;
+  vector<double> bestL;
+
+  // Inizializza le città con coordinate casuali
+
+
+  vector<Tour> population = generateInitialPopulation(cities);
   Tour bestTour = population[0];
+
+  //CheckPopulation(population);
+  //cout<<"first lunghezzza    "<<tourLength(population[0], cities)<<endl;
   ofstream out_L;
   string str_out_L_ = "./out_L_N" + std::to_string(RANK) + ".dat";
   out_L.open(str_out_L_,ios::app);
@@ -73,6 +76,11 @@ int main(int argc, char* argv[]) {
           if (i < POPULATION_SIZE/2)  bestL_ave += population[i].distance/(POPULATION_SIZE/2);
 
           //cout<<" fraction of generation: "<<i<< "of" << POPULATION_SIZE<<endl;
+          if (rnd.Rannyu()<R_RATE){
+            int pr = (int)(POPULATION_SIZE*rnd.Rannyu());
+            shuffle(population[pr].order);
+            population[pr].distance = tourLength(population[pr], cities);
+          }
           if (rnd.Rannyu()<M_RATE){
             //cout<<"-----------start mutation 1-----------"<<endl;
             //PrintTour(population[p1]);
@@ -131,7 +139,8 @@ int main(int argc, char* argv[]) {
             //cout<<"-----------end crossover-----------"<<endl<<endl;
           }
 
-          CheckPopulation(population);
+          //CheckPopulation(population);
+          bestTour = population[0];
           for (unsigned int j = 0; j < POPULATION_SIZE; ++j) {
               bestTour = selectBestTour(bestTour, population[j]);
           }
@@ -230,6 +239,8 @@ void Input(void)
   ReadInput >> M_RATE;
 
   ReadInput >> C_RATE;
+
+  ReadInput >> R_RATE;
 
   ReadInput >> CONVENIENT_EXPONENT;
 
