@@ -50,7 +50,6 @@ int main(int argc, char* argv[]) {
   Tour bestTour = population[0];
 
   //CheckPopulation(population);
-  //cout<<"first lunghezzza    "<<tourLength(population[0], cities)<<endl;
   ofstream out_L;
   string str_out_L_ = "./out_L_N" + std::to_string(RANK) + ".dat";
   out_L.open(str_out_L_,ios::app);
@@ -152,7 +151,7 @@ int main(int argc, char* argv[]) {
 
       if(generation % GENERATION_MIGRATION == 0 && BOOL_MIGRATION==1){
         sortPopulation(newPopulation);
-        for(int nodo = 0; nodo < SIZE ; ++nodo){
+        for(int nodo = 1; nodo < SIZE ; ++nodo){
           for (unsigned int i = 0; i < POPULATION_SIZE; ++i) {
               bestTour = selectBestTour(bestTour, newPopulation[i]);
           }

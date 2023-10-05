@@ -19,7 +19,7 @@ void shuffle(vector<int>& tour){
       tour[id1] = tour[id2];
       tour[id2] = save_el;
   }
-  
+
   return;
 }
 
@@ -36,10 +36,10 @@ double tourLength(const Tour& tour, const vector<City>& cities) {
 */
 double tourLength(const Tour& tour, const vector<City>& cities) {
     double totalDistance = 0.0;
-    for (unsigned int i = 0; i < NUM_CITIES; ++i) {
-        totalDistance += distance(cities[tour.order[i]], cities[tour.order[i + 1]]);
+    for (unsigned int i = 1; i < NUM_CITIES; i++) {
+        totalDistance += distance(cities[tour.order[i]], cities[tour.order[i - 1]]);
     }
-    totalDistance += distance(cities[tour.order[NUM_CITIES]], cities[tour.order[0]]);
+    totalDistance += distance(cities[tour.order[0]], cities[tour.order[NUM_CITIES-1]]);
     return totalDistance;
 }
 

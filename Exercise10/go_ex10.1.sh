@@ -13,15 +13,15 @@ echo -e "___________________________________________________________\n\n"
 
 
 BOOL_MIGRATION=1
-NUM_CORES=5
+NUM_CORES=8
 NUM_CITIES=50
-POPULATION_SIZE=300
+POPULATION_SIZE=400
 MAX_GENERATIONS=300
 M_RATE=0.2
 C_RATE=0.5
 R_RATE=0.001
 CONVENIENT_EXPONENT=2
-GENERATION_MIGRATION=4
+GENERATION_MIGRATION=30
 echo -e "\nExercise 10.1 - using $NUM_CORES comunicating cores \n"
 cp input.dummy input.in
 

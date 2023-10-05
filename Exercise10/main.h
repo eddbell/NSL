@@ -9,5 +9,4 @@ using namespace std;
 
 void Input(void);
 void StartGenerator(void);
-
 #endif // __funzioni__
