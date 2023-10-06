@@ -4,9 +4,9 @@
 0.02
 1
 0
-1
-300
-1
+0
+100
+10000
 
 #temp
 #nspin
@@ -15,5 +15,5 @@
 #metropoli=1 gibbs = 0
 #restart
 #equilibration
-#300
-#1
+#100
+#10000

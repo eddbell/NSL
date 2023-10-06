@@ -22,6 +22,7 @@ int main (int argc, char *argv[]){
     call_vec.push_back(exp(-r*T)*max(0.,S_final-K));
     put_vec.push_back(exp(-r*T)*max(0.,K-S_final));
   }
+  
   Block cal_instant(N,call_vec);
   cal_instant.Average();
   cal_instant.Average_cumulative("./data/call1.dat");
