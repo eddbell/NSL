@@ -157,3 +157,17 @@ make
 Then to execute the simulation:
 
 ./go_ex10.sh
+
+========================================
+
+Exercise 10
+
+cd Exercise10
+
+execute the command 'make' to compile:
+
+make
+
+Then to execute the simulation:
+
+./go_ex10.sh
