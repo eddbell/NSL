@@ -1,23 +1,19 @@
-LSN_esercises_delivery
-# NSL
+# LSN_exercises_delivery
 
-========================================
+## NSL - Numerical Simulation Laboratory
 
-Exercise 01
+This repository contains exercises and code for the Numerical Simulation Laboratory (NSL). Below are instructions for compiling and executing the code for each exercise.
 
+### Exercise 01
+
+```bash
 cd Exercise01
-
-execute the command 'make' to compile:
-
 make
-
-Then to execute the code:
-
 ./main.exe
 
 ========================================
 
-Exercise 02
+### Exercise 01
 
 cd Exercise02
 
@@ -31,7 +27,7 @@ Then to execute the code:
 
 ========================================
 
-Exercise 03
+### Exercise 03
 
 cd Exercise03
 
