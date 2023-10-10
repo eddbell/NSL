@@ -115,11 +115,11 @@ Then to execute the equilibration:
 ```
 Then to execute the simulation:
 ```bash
-./go_7.3.sh
+./go_NVT.sh
 ```
 and
 ```bash
-./go_7.4.sh
+./go_NVE.sh
 ```
 ========================================
 
