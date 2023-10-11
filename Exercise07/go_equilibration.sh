@@ -34,6 +34,7 @@ sed -i "s/nblk_dummy/$NBLK/g" ./Config/input.in
 sed -i "s/nstep_dummy/$NSTEP/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/0.11/g" ./Config/input.in
+sed -i "s/temp_dummy/0.8/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        $iNEVT            (FIXED)"
@@ -46,6 +47,9 @@ echo -e "delta =        0.11 "
 
 ./NVE_NVT.exe
 mv ./output_epot.dat data/equilibration/output_pot_solid.dat
+mv rm output_g.dat
+mv rm output_g_err.dat
+mv rm output_pres.dat
 
 echo "<INFO> Saving position output file in: ./data/equilibration/output_pot_solid.dat"
 echo -e "______________________________________________________________________\n"
@@ -62,6 +66,7 @@ sed -i "s/nblk_dummy/$NBLK/g" ./Config/input.in
 sed -i "s/nstep_dummy/$NSTEP/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/0.205/g" ./Config/input.in
+sed -i "s/temp_dummy/1.1/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        $iNEVT            (FIXED)"
@@ -73,7 +78,9 @@ echo -e "delta =        0.205 "
 
 ./NVE_NVT.exe
 mv ./output_epot.dat data/equilibration/output_pot_liquid.dat
-
+mv rm output_g.dat
+mv rm output_g_err.dat
+mv rm output_pres.dat
 echo "<INFO> Saving position output file in: ./data/equilibration/output_pot_liquid.dat"
 echo -e "______________________________________________________________________\n"
 
@@ -88,6 +95,8 @@ sed -i "s/nblk_dummy/$NBLK/g" ./Config/input.in
 sed -i "s/nstep_dummy/$NSTEP/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/0/g" ./Config/input.in
 sed -i "s/delta_dummy/4/g" ./Config/input.in
+sed -i "s/temp_dummy/1.2/g" ./Config/input.in
+
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        $iNEVT            (FIXED)"
@@ -99,6 +108,8 @@ echo -e "delta =        4 "
 
 ./NVE_NVT.exe
 mv ./output_epot.dat data/equilibration/output_pot_gas.dat
-
+mv rm output_g.dat
+mv rm output_g_err.dat
+mv rm output_pres.dat
 echo "<INFO> Saving position output file in: ./data/equilibration/output_pot_gas.dat"
 echo -e "______________________________________________________________________\n"

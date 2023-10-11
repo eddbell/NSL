@@ -33,8 +33,9 @@ echo -e "\nStime of  Potential energy and Pressure via MOLECULAR DYNAMIC ALGORIT
 echo -e "----------------------------------------------\n"
 echo -e "\nSOLID SIMULATION"
 echo -e "----------------------------------------------\n"
-nstep=2000
+nstep=1000
 eqtemp=2000
+temp=1.5414
 cp ./Config/config.fcc ./Config/config.in
 cp  ./Config/input.solid ./Config/input.in
 sed -i "s/iNEVT_dummy/$iNEVT/g" ./Config/input.in
@@ -43,6 +44,7 @@ sed -i "s/restart_dummy/$restart/g" ./Config/input.in
 sed -i "s/nstep_dummy/$nstep/g" ./Config/input.in
 sed -i "s/delta_dummy/$delta/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/$eqtemp/g" ./Config/input.in
+sed -i "s/temp_dummy/$temp/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        ${iNEVT}        "
@@ -62,8 +64,9 @@ echo -e "______________________________________________________________________\
 
 echo -e "\nLIQUID SIMULATION"
 echo -e "----------------------------------------------\n"
-nstep=2000
+nstep=1000
 eqtemp=5000
+temp=1.888815
 cp ./Config/config.out ./Config/config.in
 cp  ./Config/input.liquid ./Config/input.in
 sed -i "s/iNEVT_dummy/${iNEVT}/g" ./Config/input.in
@@ -72,6 +75,7 @@ sed -i "s/restart_dummy/$restart/g" ./Config/input.in
 sed -i "s/nstep_dummy/$nstep/g" ./Config/input.in
 sed -i "s/delta_dummy/$delta/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/$eqtemp/g" ./Config/input.in
+sed -i "s/temp_dummy/$temp/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        ${iNEVT}        "
@@ -91,8 +95,9 @@ echo -e "______________________________________________________________________\
 
 echo -e "\nGAS SIMULATION"
 echo -e "----------------------------------------------\n"
-nstep=10000
-eqtemp=2000
+nstep=20000
+eqtemp=40000
+temp=0.955
 cp ./Config/config.out ./Config/config.in
 cp  ./Config/input.gas ./Config/input.in
 
@@ -102,6 +107,7 @@ sed -i "s/restart_dummy/$restart/g" ./Config/input.in
 sed -i "s/nstep_dummy/$nstep/g" ./Config/input.in
 sed -i "s/delta_dummy/$delta/g" ./Config/input.in
 sed -i "s/eqtemp_dummy/$eqtemp/g" ./Config/input.in
+sed -i "s/temp_dummy/$temp/g" ./Config/input.in
 
 echo -e "<PARAMETERS INFO>"
 echo -e "iNEVT =        ${iNEVT}        "
