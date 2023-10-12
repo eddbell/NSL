@@ -87,6 +87,7 @@ int main (int argc, char *argv[]){
       co++;
     }
   }
+  
   for(unsigned int j = 0; j<M;j++){
     for(unsigned int i = 0; i<N;i++){//step temporali
       ran1 = rnd.Rannyu();
